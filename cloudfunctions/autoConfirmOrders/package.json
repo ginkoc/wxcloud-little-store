@@ -1,0 +1,9 @@
+{
+  "name": "auto-confirm-orders",
+  "version": "1.0.0",
+  "description": "自动确认超时订单的定时任务",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "^3.0.1"
+  }
+} 

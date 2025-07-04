@@ -1,0 +1,85 @@
+<view class="container">
+  <view class="header">
+    <text class="title">{{isEdit ? '编辑地址' : '新增地址'}}</text>
+  </view>
+  
+  <view class="form-container">
+    <!-- 收货人姓名 -->
+    <view class="form-item">
+      <text class="label">收货人</text>
+      <input class="input {{formErrors.contactName ? 'input-error' : ''}}" 
+             placeholder="收货人姓名" 
+             value="{{address.contactName}}" 
+             bindinput="onInput" 
+             data-field="contactName" />
+      <text class="error-text" wx:if="{{formErrors.contactName}}">{{formErrors.contactName}}</text>
+    </view>
+    
+    <!-- 手机号 -->
+    <view class="form-item">
+      <text class="label">手机号</text>
+      <input class="input {{formErrors.contactPhone ? 'input-error' : ''}}" 
+             placeholder="输入手机号" 
+             value="{{address.contactPhone}}" 
+             type="number"
+             maxlength="11"
+             bindinput="onInput" 
+             data-field="contactPhone" />
+      <text class="error-text" wx:if="{{formErrors.contactPhone}}">{{formErrors.contactPhone}}</text>
+    </view>
+    
+    <!-- 选择地区 -->
+    <view class="form-item">
+      <text class="label">选择地址</text>
+      <view class="address-select-row" bindtap="chooseLocation">
+        <text class="address-placeholder" wx:if="{{!address.street}}">小区名/楼宇/学校/公司等地名</text>
+        <text class="address-text" wx:else>{{region[2]}}·{{address.street}}</text>
+        <text class="address-arrow">></text>
+      </view>
+      <text class="error-text" wx:if="{{formErrors.region}}">{{formErrors.region}}</text>
+    </view>
+    
+    <!-- 详细地址 -->
+    <view class="form-item">
+      <text class="label">详细地址</text>
+      <view class="detail-address-container">
+        <textarea class="textarea {{formErrors.detailAddress ? 'input-error' : ''}}" 
+                 placeholder="详细地址，如：16号楼5层501" 
+                 value="{{address.detailAddress}}" 
+                 bindinput="onInput" 
+                 data-field="detailAddress" />
+      </view>
+      <text class="error-text" wx:if="{{formErrors.detailAddress}}">{{formErrors.detailAddress}}</text>
+    </view>
+    
+    <!-- 标签 -->
+    <view class="form-item">
+      <text class="label">标签</text>
+      <view class="tag-group">
+        <view class="tag {{address.tag === item ? 'tag-selected' : ''}}" 
+              wx:for="{{tags}}" 
+              wx:key="*this"
+              bindtap="selectTag"
+              data-tag="{{item}}">
+          {{item}}
+        </view>
+      </view>
+    </view>
+    
+    <!-- 设为默认地址 -->
+    <view class="form-item switch-item">
+      <text class="label">设为默认收货地址</text>
+      <switch checked="{{address.isDefault}}" bindchange="toggleDefault" color="#4caf50" />
+    </view>
+    
+    <!-- 提示文字 -->
+    <view class="tip-text" wx:if="{{address.isDefault}}">
+      <text>下单时将优先使用该地址</text>
+    </view>
+  </view>
+  
+  <!-- 保存按钮 -->
+  <view class="footer">
+    <button class="save-btn" bindtap="saveAddress">保存</button>
+  </view>
+</view> 

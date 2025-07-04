@@ -1,0 +1,104 @@
+<view class="container">
+  <view class="header">
+    <text class="title">确认订单</text>
+  </view>
+  
+  <!-- 地址信息 - 修改为类似图片中的样式 -->
+  <view class="address-bar" bindtap="navigateToAddressSelect">
+    <view class="address-icon">
+      <text class="icon">📍</text>
+    </view>
+    <view class="address-info">
+      <text class="address-label" wx:if="{{!address.contactName}}">请选择收货地址</text>
+      <view class="address-content" wx:else>
+        <view class="address-detail">
+          <text class="delivery-to">送至: </text>
+          <text class="address-text">{{address.street}}</text>
+        </view>
+        <view class="contact-info">
+          <text class="contact-name">{{address.contactName}}</text>
+          <text class="contact-phone">{{address.contactPhone}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="address-arrow">
+      <text class="arrow-icon">></text>
+    </view>
+  </view>
+  
+  <!-- 订单商品 -->
+  <view class="order-items">
+    <view class="section-title">订单商品</view>
+    
+    <view class="item-list">
+      <view class="item" wx:for="{{cartItems}}" wx:key="_id">
+        <image 
+          class="item-image" 
+          src="{{item.imageURL || '/images/default-product.png'}}"
+          mode="aspectFill"
+          lazy-load="true"
+        ></image>
+        <view class="item-info">
+          <text class="item-name">{{item.productName}}</text>
+          <view class="item-price-qty">
+            <text class="item-price">¥{{item.formattedPrice}}</text>
+            <text class="item-qty">×{{item.quantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 商品数量和小计 -->
+    <view class="order-summary-bar">
+      <text class="order-count">共{{totalItems}}件商品</text>
+      <text class="order-subtotal">小计: <text class="price-highlight">¥{{formattedOriginalPrice}}</text></text>
+    </view>
+    
+    <!-- 订单备注 -->
+    <view class="remark-section">
+      <text class="remark-label">订单备注</text>
+      <textarea class="remark-input" placeholder="请输入订单备注信息（选填，如配送时间、特殊要求等）" value="{{remark}}" bindinput="inputRemark"></textarea>
+    </view>
+  </view>
+  
+  <!-- 价格信息 -->
+  <view class="price-section">
+    <view class="section-title">价格明细</view>
+    
+    <view class="price-list">
+      <view class="price-item">
+        <text class="label">商品总额</text>
+        <text class="value">¥{{formattedOriginalPrice}}</text>
+      </view>
+      
+      <view class="price-item" wx:if="{{discountFee > 0}}">
+        <text class="label">优惠折扣</text>
+        <text class="value discount">-¥{{formattedDiscountAmount}}</text>
+      </view>
+      
+      <view class="price-item">
+        <text class="label">配送费用</text>
+        <text class="value">¥0.00</text>
+      </view>
+      
+      <view class="price-divider"></view>
+      
+      <view class="price-item total">
+        <text class="label">应付金额</text>
+        <text class="total-price">¥{{formattedTotalPrice}}</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 提交订单 -->
+  <view class="submit-section">
+    <view class="submit-info">
+      <text class="total-label">合计:</text>
+      <text class="total-price">¥{{formattedTotalPrice}}</text>
+      <text class="item-count">({{totalItems}}件商品)</text>
+    </view>
+    <button class="submit-btn {{isSubmitting ? 'disabled' : ''}}" bindtap="submitOrder" disabled="{{isSubmitting}}">
+      {{isSubmitting ? '提交中...' : '提交订单'}}
+    </button>
+  </view>
+</view> 

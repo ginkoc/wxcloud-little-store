@@ -1,0 +1,86 @@
+<view class="container">
+  <view class="header">
+    <text class="title">我的</text>
+  </view>
+  
+  <!-- 用户信息区域 -->
+  <view class="user-info-section">
+    <block wx:if="{{isLoggedIn}}">
+      <view class="avatar-container">
+        <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      </view>
+      <view class="user-details">
+        <text class="username">{{userInfo.nickName || '用户'}}</text>
+        <text class="user-role">{{isAdmin ? '管理员' : '普通用户'}}</text>
+      </view>
+      <view class="logout-btn" bindtap="logout">退出登录</view>
+    </block>
+    <block wx:else>
+      <view class="login-section">
+        <view class="login-prompt">请登录以使用更多功能</view>
+        <view class="login-btn" bindtap="login">登录</view>
+      </view>
+    </block>
+  </view>
+  
+  <!-- 功能菜单区域 -->
+  <view class="menu-section">
+    <!-- 普通用户菜单 -->
+    <block wx:if="{{isLoggedIn && !isAdmin}}">
+      <view class="menu-item" bindtap="navigateToMyOrders">
+        <view class="menu-icon">📋</view>
+        <view class="menu-text">我的订单</view>
+        <view class="menu-arrow">></view>
+      </view>
+      <view class="menu-item" bindtap="navigateToAddressList">
+        <view class="menu-icon">📍</view>
+        <view class="menu-text">地址管理</view>
+        <view class="menu-arrow">></view>
+      </view>
+      <view class="menu-item" bindtap="navigateToCart">
+        <view class="menu-icon">🛒</view>
+        <view class="menu-text">购物车</view>
+        <view class="menu-arrow">></view>
+      </view>
+    </block>
+    
+    <!-- 管理员菜单 -->
+    <block wx:if="{{isLoggedIn && isAdmin}}">
+      <view class="menu-item" bindtap="navigateToOrderManage">
+        <view class="menu-icon">📊</view>
+        <view class="menu-text">订单管理</view>
+        <view class="menu-arrow">></view>
+      </view>
+      <view class="menu-item" bindtap="navigateToNotices">
+        <view class="menu-icon">🔔</view>
+        <view class="menu-text">消息通知</view>
+        <view class="unread-badge" wx:if="{{unreadCount > 0}}">{{unreadCount}}</view>
+        <view class="menu-arrow">></view>
+      </view>
+      <view class="menu-item" bindtap="navigateToProductManage">
+        <view class="menu-icon">📦</view>
+        <view class="menu-text">商品管理</view>
+        <view class="menu-arrow">></view>
+      </view>
+    </block>
+    
+    <!-- 未登录时显示的菜单 -->
+    <block wx:if="{{!isLoggedIn}}">
+      <view class="menu-item disabled">
+        <view class="menu-icon gray">📋</view>
+        <view class="menu-text gray">我的订单</view>
+        <view class="menu-arrow gray">></view>
+      </view>
+      <view class="menu-item disabled">
+        <view class="menu-icon gray">🛒</view>
+        <view class="menu-text gray">购物车</view>
+        <view class="menu-arrow gray">></view>
+      </view>
+    </block>
+  </view>
+  
+  <!-- 版本信息 -->
+  <view class="footer">
+    <text class="version">{{storeName}} {{storeVersion}}</text>
+  </view>
+</view> 

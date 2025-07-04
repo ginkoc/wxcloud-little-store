@@ -1,0 +1,85 @@
+<view class="container">
+  <view class="header">
+    <text class="title">购物车</text>
+  </view>
+  
+  <view class="cart-content" wx:if="{{cartItems.length > 0}}">
+    <!-- 按类别分组的购物车列表 -->
+    <view class="category-section" wx:for="{{categories}}" wx:key="id" wx:for-item="category">
+      <view class="category-header">
+        <view class="category-select">
+          <checkbox 
+            checked="{{categorySelectStatus[category.id]}}" 
+            bindtap="toggleCategorySelect" 
+            data-category-id="{{category.id}}"
+            color="#3B87DE"
+          ></checkbox>
+          <text class="category-name">{{category.name}}</text>
+        </view>
+      </view>
+      
+      <view class="cart-list">
+        <view class="cart-item" wx:for="{{categorizedItems[category.id].items}}" wx:key="_id">
+          <view class="item-select">
+            <checkbox checked="{{item.selected}}" bindtap="toggleSelect" data-id="{{item._id}}" color="#3B87DE"></checkbox>
+          </view>
+          <image 
+            class="item-image"
+            src="{{item.imageURL || '/images/default-product.png'}}" 
+            mode="aspectFill"
+            lazy-load="{{true}}"
+            bindtap="viewProductDetail"
+            data-id="{{item.productId}}"
+          ></image>
+          <view class="item-info">
+            <text class="item-name">{{item.productName}}</text>
+            <text class="item-price">¥{{item.formattedPrice}}</text>
+            <view class="item-quantity">
+              <view class="quantity-btn {{item.quantity <= 1 ? 'quantity-btn-disabled' : ''}}" 
+                   bindtap="decreaseQuantity" data-id="{{item._id}}">-</view>
+              <text class="quantity-text">{{item.quantity}}</text>
+              <view class="quantity-btn" bindtap="increaseQuantity" data-id="{{item._id}}">+</view>
+            </view>
+            
+            <!-- 商品状态提示 -->
+            <view class="status-tips" wx:if="{{item.statusWarning || item.stockStatus}}">
+              <text class="status-warning" wx:if="{{item.statusWarning}}">{{item.statusWarning}}</text>
+              <text class="stock-status" wx:if="{{item.stockStatus}}">{{item.stockStatus}}</text>
+            </view>
+          </view>
+          <view class="item-delete" bindtap="removeCartItem" data-id="{{item._id}}">
+            <text>删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 底部结算栏 -->
+    <view class="cart-footer">
+      <view class="select-all">
+        <checkbox checked="{{selectAll}}" bindtap="toggleSelectAll" color="#3B87DE"></checkbox>
+        <text class="select-all-text">全选</text>
+      </view>
+      <view class="total-info">
+        <text class="total-label">合计: </text>
+        <text class="total-price">¥{{formattedTotalPrice}}</text>
+      </view>
+      <view class="action-buttons">
+        <view class="btn btn-delete" bindtap="removeSelectedItems" wx:if="{{hasSelectedItems}}">删除</view>
+        <view class="btn btn-checkout {{!hasSelectedItems ? 'disabled' : ''}}" bindtap="checkout">
+          结算<text wx:if="{{totalItems > 0}}">({{totalItems}})</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 空购物车状态 -->
+  <view class="empty-cart" wx:else>
+    <image class="empty-icon" src="/images/empty-cart.svg" mode="aspectFit"></image>
+    <text class="empty-text">购物车还是空的</text>
+    <text class="empty-desc">快去挑选心仪的商品吧</text>
+    <view class="btn-continue" bindtap="continueShopping">
+      <text class="continue-text">去购物</text>
+    </view>
+  </view>
+</view> 

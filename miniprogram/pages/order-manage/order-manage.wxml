@@ -1,0 +1,164 @@
+<view class="container">
+  <view class="header">
+    <text class="title">订单管理</text>
+  </view>
+  
+  <view class="search-section">
+    <!-- 搜索栏第一行：搜索类型和输入框 -->
+    <view class="search-row">
+      <view class="search-type">
+        <picker bindchange="onSearchTypeChange" value="{{0}}" range="{{searchTypes}}" range-key="name">
+          <view class="picker">
+            {{searchTypes[searchType === 'orderId' ? 0 : (searchType === 'contactName' ? 1 : (searchType === 'contactPhone' ? 2 : 3))].name}}
+            <text class="arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      <view class="search-input-container">
+        <input class="search-input" placeholder="请输入搜索内容" value="{{searchQuery}}" bindinput="onSearchInput" confirm-type="search" bindconfirm="doSearch" />
+        <view class="search-btn" bindtap="doSearch">
+          <text class="iconfont icon-search">🔍</text>
+        </view>
+      </view>
+      <!-- 清空按钮移到搜索按钮旁边 -->
+      <view class="clear-btn" bindtap="clearSearch">清空</view>
+    </view>
+    
+    <!-- 搜索栏第二行：过滤选项 -->
+    <view class="filter-row">
+      <!-- 日期筛选 - 延伸宽度 -->
+      <view class="date-filter" bindtap="showDatePicker">
+        <view class="filter-value">
+          <text class="filter-label">日期筛选</text>
+          <view class="filter-text">{{dateRange.start ? (dateRange.start + ' 至 ' + (dateRange.end || '现在')) : '不限'}} <text class="arrow">▼</text></view>
+        </view>
+      </view>
+      
+      <!-- 状态筛选 - 压缩宽度 -->
+      <view class="status-filter">
+        <picker bindchange="onStatusFilterChange" value="{{statusFilterIndex}}" range="{{statusList}}" range-key="text">
+          <view class="filter-value">
+            <text class="filter-label">状态筛选</text>
+            <view class="filter-text">{{statusList[statusFilterIndex] ? statusList[statusFilterIndex].text : '全部状态'}} <text class="arrow">▼</text></view>
+          </view>
+        </picker>
+      </view>
+    </view>
+  </view>
+  
+  <view class="date-picker-container" wx:if="{{showDatePicker}}">
+    <view class="date-picker-mask" bindtap="onDatePickerCancel"></view>
+    <view class="date-picker">
+      <view class="date-picker-header">
+        <text class="date-picker-title">选择日期范围</text>
+        <text class="close-btn" bindtap="onDatePickerCancel">×</text>
+      </view>
+      
+      <view class="date-input-row">
+        <text class="date-input-row-text">开始日期：</text>
+        <picker mode="date" bindchange="onStartDateChange" value="{{dateRange.start}}">
+          <view class="date-input">{{dateRange.start || '选择日期'}}</view>
+        </picker>
+      </view>
+      
+      <view class="date-input-row">
+        <text class="date-input-row-text">结束日期：</text>
+        <picker mode="date" bindchange="onEndDateChange" value="{{dateRange.end}}">
+          <view class="date-input">{{dateRange.end || '选择日期'}}</view>
+        </picker>
+      </view>
+      
+      <view class="date-picker-actions">
+        <button class="date-picker-actions-btn cancel-btn" bindtap="onDatePickerCancel">取消</button>
+        <button class="date-picker-actions-btn confirm-btn" bindtap="onDatePickerConfirm">确定</button>
+      </view>
+    </view>
+  </view>
+  
+  <view class="order-list">
+    <view class="list-header">
+      <text class="result-info">共 {{total}} 条记录</text>
+      <text class="page-info">{{currentPage}}/{{totalPages}}页</text>
+    </view>
+    
+    <!-- 订单列表 -->
+    <block wx:for="{{displayOrders}}" wx:key="_id">
+      <view class="order-item card" bindtap="navigateToOrderDetail" data-id="{{item._id}}">
+        <!-- 订单标题栏 -->
+        <view class="order-header">
+          <view class="order-id-section">
+            <text class="order-id-label">订单号</text>
+            <text class="order-id-value">{{item._id}}</text>
+          </view>
+          
+          <!-- 状态标签放在右侧 -->
+          <view class="order-status" style="color: {{item.statusColor}}">{{item.statusText}}</view>
+        </view>
+        
+        <!-- 订单内容区 -->
+        <view class="order-content">
+          <view class="order-info-row">
+            <view class="order-info-item">
+              <text class="info-label">下单时间</text>
+              <text class="info-value">{{item.createTime}}</text>
+            </view>
+            
+            <view class="order-info-item" wx:if="{{item.contactName}}">
+              <text class="info-label">联系人</text>
+              <text class="info-value highlight">{{item.contactName}}</text>
+            </view>
+            
+            <view class="order-info-item" wx:if="{{item.contactPhone}}">
+              <text class="info-label">电话</text>
+              <text class="info-value">{{item.contactPhone}}</text>
+            </view>
+          </view>
+          
+          <!-- 商品图片缩略图区域 -->
+          <view class="order-product-images" wx:if="{{item.items && item.items.length}}">
+            <scroll-view scroll-x="true" class="product-images-scroll">
+              <view class="product-images-container">
+                <block wx:for="{{item.items}}" wx:for-item="product" wx:key="productId">
+                  <image class="product-thumbnail" src="{{product.imageURL || '/images/default-product.png'}}" mode="aspectFill" lazy-load="true"></image>
+                </block>
+              </view>
+            </scroll-view>
+          </view>
+          
+          <!-- 商品信息和价格区域 -->
+          <view class="order-product-info" wx:if="{{item.items && item.items.length}}">
+            <view class="product-info-row">
+              <text class="product-count">共{{item.items.length}}件商品</text>
+              <view class="order-price">¥{{item.formattedTotalPrice || '0.00'}}</view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 操作区域 -->
+        <view class="order-actions">
+          <!-- 查看详情按钮 - 移到右侧 -->
+          <view class="detail-btn-small" catchtap="navigateToOrderDetail" data-id="{{item._id}}" bindtap="markActionButtonClick">
+            <text>查看详情</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    
+    <view class="empty-tip" wx:if="{{displayOrders.length === 0 && !isLoading}}">
+      <text class="empty-tip-text">没有找到匹配的订单</text>
+    </view>
+    
+    <view class="loading-container" wx:if="{{isLoading}}">
+      <view class="loading-indicator"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <view class="pagination" wx:if="{{total > 0}}">
+      <view class="page-btn {{currentPage === 1 ? 'disabled' : ''}}" bindtap="changePage" data-type="first">首页</view>
+      <view class="page-btn {{currentPage === 1 ? 'disabled' : ''}}" bindtap="changePage" data-type="prev">上一页</view>
+      <view class="page-current">{{currentPage}}/{{totalPages}}</view>
+      <view class="page-btn {{currentPage === totalPages ? 'disabled' : ''}}" bindtap="changePage" data-type="next">下一页</view>
+      <view class="page-btn {{currentPage === totalPages ? 'disabled' : ''}}" bindtap="changePage" data-type="last">末页</view>
+    </view>
+  </view>
+</view> 

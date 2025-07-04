@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 购物车底部阴影 -->
+  <ellipse cx="100" cy="165" rx="70" ry="12" fill="#E8F3FF" fill-opacity="0.6"/>
+  
+  <!-- 购物车主体 -->
+  <path d="M144 130H56C53.2386 130 51 127.761 51 125V65C51 62.2386 53.2386 60 56 60H144C146.761 60 149 62.2386 149 65V125C149 127.761 146.761 130 144 130Z" fill="#E8F3FF" stroke="#3B87DE" stroke-width="3"/>
+  
+  <!-- 购物车轮子 -->
+  <circle cx="75" cy="145" r="10" fill="#E8F3FF" stroke="#3B87DE" stroke-width="3"/>
+  <circle cx="125" cy="145" r="10" fill="#E8F3FF" stroke="#3B87DE" stroke-width="3"/>
+  
+  <!-- 购物车连接轮子 -->
+  <line x1="75" y1="130" x2="75" y2="135" stroke="#3B87DE" stroke-width="3"/>
+  <line x1="125" y1="130" x2="125" y2="135" stroke="#3B87DE" stroke-width="3"/>
+  
+  <!-- 购物车格子 -->
+  <line x1="65" y1="60" x2="65" y2="130" stroke="#3B87DE" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="85" y1="60" x2="85" y2="130" stroke="#3B87DE" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="105" y1="60" x2="105" y2="130" stroke="#3B87DE" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="125" y1="60" x2="125" y2="130" stroke="#3B87DE" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="51" y1="80" x2="149" y2="80" stroke="#3B87DE" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="51" y1="100" x2="149" y2="100" stroke="#3B87DE" stroke-width="2" stroke-dasharray="4 4"/>
+  
+  <!-- 购物车把手 -->
+  <path d="M70 50C70 44.4772 74.4772 40 80 40H120C125.523 40 130 44.4772 130 50V60H70V50Z" fill="#E8F3FF" stroke="#3B87DE" stroke-width="3"/>
+  
+  <!-- 感叹号图标 -->
+  <circle cx="100" cy="95" r="25" fill="#E8F3FF" stroke="#3B87DE" stroke-width="3"/>
+  <path d="M100 80V100" stroke="#3B87DE" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="100" cy="110" r="2" fill="#3B87DE"/>
+  
+  <!-- 装饰元素 -->
+  <circle cx="45" cy="45" r="6" fill="#E64340" fill-opacity="0.7"/>
+  <circle cx="155" cy="45" r="6" fill="#E64340" fill-opacity="0.7"/>
+</svg> 

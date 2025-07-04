@@ -1,0 +1,179 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding-bottom: 120rpx;
+}
+
+/* 头部样式 */
+.header {
+  padding: 30rpx 30rpx;
+  background-color: #fff;
+  border-bottom: 1rpx solid #eee;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 登录提示 */
+.login-tip {
+  width: 100%;
+  padding: 60rpx 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 加载中 */
+.loading {
+  width: 100%;
+  padding: 60rpx 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 空数据提示 */
+.empty-data {
+  width: 100%;
+  padding: 60rpx 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 地址列表 */
+.address-list {
+  width: 100%;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.address-item {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-sizing: border-box;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 默认地址样式 */
+.address-item.default {
+  background-color: #f8f8ff;
+  border: 1rpx solid #e6e6fa;
+}
+
+.default-tag {
+  position: absolute;
+  top: 30rpx;
+  right: 30rpx;
+  background-color: #4caf50;
+  color: white;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+/* 地址信息 */
+.address-info {
+  width: 100%;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-right: 20rpx;
+}
+
+.phone {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.detail-address {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
+.tag-row {
+  display: flex;
+  margin-top: 12rpx;
+}
+
+.tag {
+  display: inline-block;
+  background-color: #f5f5f5;
+  color: #666;
+  font-size: 24rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+  margin-right: 10rpx;
+}
+
+/* 操作区域 */
+.action-area {
+  padding-top: 20rpx;
+}
+
+.action-btn-group {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  margin-left: 30rpx;
+}
+
+.btn-text {
+  font-size: 26rpx;
+  color: #555;
+}
+
+/* 底部添加按钮 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 20rpx;
+  box-sizing: border-box;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.add-btn {
+  width: 100%;
+  height: 80rpx;
+  background-color: #4caf50;
+  color: white;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx;
+} 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 底部阴影 -->
+  <ellipse cx="64" cy="108" rx="40" ry="6" fill="#f0f0f0"/>
+  
+  <!-- 底部开口的盒子 -->
+  <path d="M34 40H94V90C94 94.4183 90.4183 98 86 98H42C37.5817 98 34 94.4183 34 90V40Z" fill="#f7f7f7" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- 盒子顶部 -->
+  <path d="M30 32C30 30.8954 30.8954 30 32 30H96C97.1046 30 98 30.8954 98 32V44H30V32Z" fill="#f2f2f2" stroke="#e0e0e0" stroke-width="2"/>
+  
+  <!-- 盒子内部虚线 -->
+  <path d="M38 50H90" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M38 60H90" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M38 70H90" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="4 4"/>
+  <path d="M38 80H90" stroke="#e0e0e0" stroke-width="2" stroke-dasharray="4 4"/>
+  
+  <!-- 叉叉图标 -->
+  <circle cx="64" cy="40" r="14" fill="#ffefef"/>
+  <path d="M58 34L70 46" stroke="#e64340" stroke-width="3" stroke-linecap="round"/>
+  <path d="M70 34L58 46" stroke="#e64340" stroke-width="3" stroke-linecap="round"/>
+</svg> 

@@ -1,0 +1,9 @@
+{
+  "timeout": 30,
+  "envId": "cloud1-3g0lxmwz0c7f0ff2",
+  "runtime": "Nodejs16.13",
+  "memory": 512,
+  "environment": {
+    "variables": {}
+  }
+} 

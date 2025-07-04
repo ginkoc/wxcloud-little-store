@@ -1,0 +1,322 @@
+<view class="container">
+  <view class="header">
+    <text class="title">订单详情</text>
+  </view>
+  
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-indicator"></view>
+    <text>加载中...</text>
+  </view>
+  
+  <block wx:elif="{{orderInfo}}">
+    <!-- 商品信息 -->
+    <view class="product-section">
+      <view class="section-title">商品信息</view>
+      <view class="product-list clickable">
+        <view class="product-item" wx:for="{{orderInfo.items}}" wx:key="productId">
+          <image 
+            class="product-image" 
+            src="{{item.imageURL || '/images/default-product.png'}}" 
+            mode="aspectFill"
+            lazy-load="{{true}}"
+          />
+          <view class="product-info">
+            <text class="product-name">{{item.productName}}</text>
+            <text class="product-price">单价: ¥{{item.formattedProductPrice}}</text>
+            <text class="product-quantity">数量: {{item.quantity}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 🆕 折叠式订单状态历史 -->
+    <view class="order-status-section">
+      <view class="section-header">
+        <text class="section-title">订单状态</text>
+        <view class="toggle-btn" bindtap="toggleStatusHistory">
+          <text class="toggle-text">{{showStatusHistory ? '收起' : '查看详情'}}</text>
+          <text class="arrow {{showStatusHistory ? 'up' : 'down'}}">{{showStatusHistory ? '▲' : '▼'}}</text>
+        </view>
+      </view>
+      
+      <!-- 当前状态概览（始终显示） -->
+      <view class="current-status-overview">
+        <view class="status-current">
+          <view class="status-dot" style="background-color: {{orderInfo.statusColor}}"></view>
+          <text class="status-text">{{orderInfo.statusText}}</text>
+        </view>
+        <view class="status-time">{{orderInfo.updateTime}}</view>
+        
+        <view class="create-time">
+          <text class="label">下单时间：</text>
+          <text class="value">{{orderInfo.createTime}}</text>
+        </view>
+      </view>
+      
+      <!-- 详细状态历史（可折叠） -->
+      <view class="status-history-detail {{showStatusHistory ? 'expanded' : 'collapsed'}}">
+        <view class="loading-history" wx:if="{{loadingHistory && !isLoadingMore}}">
+          <text>加载状态历史...</text>
+        </view>
+        
+        <scroll-view 
+          class="timeline-scroll" 
+          scroll-y="{{true}}" 
+          bindscrolltolower="loadMoreHistory"
+          lower-threshold="100"
+          enable-flex="true"
+          enhanced="true"
+          wx:if="{{statusHistoryList.length > 0}}">
+          
+          <view class="timeline-container">
+            <view class="timeline-item {{item.statusType}}" wx:for="{{statusHistoryList}}" wx:key="_id">
+              <view class="timeline-left">
+                <view class="timeline-dot {{item.statusType}}"></view>
+                <view class="timeline-line" wx:if="{{index < statusHistoryList.length - 1}}"></view>
+              </view>
+              <view class="timeline-right">
+                <view class="timeline-header">
+                  <text class="status-name {{item.statusType}}">{{item.statusText}}</text>
+                  <text class="operator">{{item.operatorText}}</text>
+                </view>
+                <view class="timeline-time">{{item.timeText}}</view>
+                
+                <!-- 用户友好的备注显示 -->
+                <view class="timeline-remark {{item.statusType}}" wx:if="{{item.displayRemark}}">
+                  <text class="remark-text">{{item.displayRemark}}</text>
+                </view>
+                
+                <!-- 用户友好的消息提示 -->
+                <view class="user-message" wx:if="{{item.userFriendlyMessage}}">
+                  <text class="message-text">💡 {{item.userFriendlyMessage}}</text>
+                </view>
+                
+                <!-- 失败状态的联系客服按钮 -->
+                <view class="contact-service" wx:if="{{item.showContactService}}">
+                  <text class="service-text" bindtap="contactService">如有疑问，点击联系客服</text>
+                </view>
+                
+                <view class="timeline-transition" wx:if="{{item.fromStatusText && item.fromStatusText !== item.statusText && !item.isFailed}}">
+                  <text class="transition-text">从"{{item.fromStatusText}}"变更为"{{item.statusText}}"</text>
+                </view>
+              </view>
+            </view>
+            
+            <!-- 加载更多提示 -->
+            <view class="loading-more" wx:if="{{isLoadingMore}}">
+              <text>加载更多...</text>
+            </view>
+            
+            <!-- 没有更多数据提示 -->
+            <view class="no-more-data" wx:if="{{!hasMoreHistory && statusHistoryList.length > 0 && historyPage > 1}}">
+              <text>没有更多记录了</text>
+            </view>
+          </view>
+        </scroll-view>
+        
+        <view class="no-history" wx:elif="{{showStatusHistory && !loadingHistory}}">
+          <text class="no-history-text">暂无状态变更记录</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 订单信息 -->
+    <view class="order-info">
+      <view class="section-title">订单信息</view>
+      
+      <view class="info-item">
+        <text class="label">订单编号</text>
+        <text class="value">{{orderInfo._id}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">下单时间</text>
+        <text class="value">{{orderInfo.createTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.payTime}}">
+        <text class="label">支付时间</text>
+        <text class="value">{{orderInfo.payTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.acceptTime}}">
+        <text class="label">接单时间</text>
+        <text class="value">{{orderInfo.acceptTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.deliverTime}}">
+        <text class="label">配送时间</text>
+        <text class="value">{{orderInfo.deliverTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.deliveredTime}}">
+        <text class="label">配送完成时间</text>
+        <text class="value">{{orderInfo.deliveredTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.refundingTime}}">
+        <text class="label">退款时间</text>
+        <text class="value">{{orderInfo.refundingTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.completeTime}}">
+        <text class="label">完成时间</text>
+        <text class="value">{{orderInfo.completeTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.status === 'cancelled' && orderInfo.cancelTime}}">
+        <text class="label">中止时间</text>
+        <text class="value">{{orderInfo.cancelTime}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.status === 'cancelled' && orderInfo.cancelReason}}">
+        <text class="label">中止原因</text>
+        <text class="value cancel-reason">{{orderInfo.cancelReason}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.status === 'cancelled' && orderInfo.cancelOperator}}">
+        <text class="label">操作人</text>
+        <text class="value cancel-operator">{{orderInfo.cancelOperator}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">支付状态</text>
+        <text class="value payment-refunded" wx:if="{{orderInfo.status === 'cancelled'}}">已退款</text>
+        <text class="value payment-refunding" wx:elif="{{orderInfo.status === 'refunding'}}">退款中</text>
+        <text class="value" wx:else>{{orderInfo.isPaid ? '已支付' : '未支付'}}</text>
+      </view>
+      <view class="info-item" wx:if="{{orderInfo.remark}}">
+        <text class="label">订单备注</text>
+        <text class="value">{{orderInfo.remark}}</text>
+      </view>
+    </view>
+    
+    <!-- 配送信息 -->
+    <view class="delivery-section">
+      <view class="section-title">配送信息</view>
+      
+      <view class="address-content">
+        <view class="address-line">
+          <text class="label">收货人：</text>
+          <text class="value">{{orderInfo.contactName || '未提供'}}</text>
+        </view>
+        <view class="address-line">
+          <text class="label">联系电话：</text>
+          <text class="value">{{orderInfo.contactPhone || '未提供'}}</text>
+        </view>
+        <view class="address-line">
+          <text class="label">收货地址：</text>
+          <text class="value">{{orderInfo.address || '未提供'}}</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 订单金额 -->
+    <view class="order-price">
+      <view class="section-title">订单金额</view>
+      
+      <view class="price-item">
+        <text class="label">商品总额</text>
+        <text class="value">¥{{orderInfo.formattedTotalPrice || '0.00'}}</text>
+      </view>
+      <view class="price-item">
+        <text class="label">配送费</text>
+        <text class="value">¥0.00</text>
+      </view>
+      <view class="price-item total">
+        <text class="label">实付款</text>
+        <text class="value">¥{{orderInfo.formattedTotalPrice || '0.00'}}</text>
+      </view>
+    </view>
+
+    <!-- 🆕 订单操作按钮区域（增强版） -->
+    <view class="action-buttons" wx:if="{{!loading && orderInfo}}">
+      <!-- 已支付状态的接单按钮 -->
+      <block wx:if="{{orderInfo.status === 'paid'}}">
+        <button class="action-btn primary" bindtap="acceptOrder">
+          接单
+        </button>
+        
+        <button class="action-btn danger" bindtap="cancelOrderByAdmin">
+          中止订单
+        </button>
+      </block>
+      
+      <!-- 已接单状态的配送按钮 -->
+      <block wx:if="{{orderInfo.status === 'accepted'}}">
+        <button class="action-btn primary" bindtap="startDelivery">
+          开始配送
+        </button>
+        
+        <button class="action-btn danger" bindtap="cancelOrderByAdmin">
+          中止订单
+        </button>
+      </block>
+      
+      <!-- 配送中状态的配送完成按钮 -->
+      <block wx:if="{{orderInfo.status === 'delivering'}}">
+        <button class="action-btn primary" bindtap="completeDelivery">
+          配送完成
+        </button>
+        
+        <button class="action-btn danger" bindtap="cancelOrderByAdmin">
+          中止订单
+        </button>
+      </block>
+      
+      <!-- 🆕 退款状态专用按钮 -->
+      <block wx:if="{{orderInfo.status === 'refunding'}}">
+        <button class="action-btn warning pulse" bindtap="checkRefundProgress">
+          <text class="progress-icon">⏳</text>
+          查看退款进度
+        </button>
+      </block>
+    </view>
+
+    <!-- 退款中状态的说明 -->
+    <view class="status-info" wx:if="{{orderInfo.status === 'refunding'}}">
+      <view class="refunding-info">
+        <text class="info-title">🔄 订单退款处理中</text>
+        <text class="info-desc">系统正在处理退款，请等待微信支付确认</text>
+        <text class="info-note">退款完成后订单状态将自动更新为已中止</text>
+      </view>
+    </view>
+
+    <!-- 其他状态的说明信息 -->
+    <view class="status-info" wx:if="{{!loading && orderInfo && orderInfo.status !== 'paid' && orderInfo.status !== 'refunding' && orderInfo.status !== 'accepted' && orderInfo.status !== 'delivering'}}">
+      <text class="info-text">当前状态下无可执行操作</text>
+    </view>
+  </block>
+  
+  <view class="empty-data" wx:else>
+    <text>订单不存在或已删除</text>
+  </view>
+  
+  <!-- 退款详情弹窗 -->
+  <view class="refund-details-modal" wx:if="{{showRefundDetails}}">
+    <view class="modal-mask" bindtap="closeRefundDetails"></view>
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">退款详情</text>
+        <text class="modal-close" bindtap="closeRefundDetails">×</text>
+      </view>
+      
+      <view class="modal-body">
+        <view class="refund-detail-item">
+          <text class="label">退款单号</text>
+          <text class="value">{{refundDetails.refundId}}</text>
+        </view>
+        <view class="refund-detail-item">
+          <text class="label">退款金额</text>
+          <text class="value">¥{{refundDetails.refundFee/100}}</text>
+        </view>
+        <view class="refund-detail-item">
+          <text class="label">退款原因</text>
+          <text class="value">{{refundDetails.refundReason}}</text>
+        </view>
+        <view class="refund-detail-item">
+          <text class="label">退款状态</text>
+          <text class="value">{{refundDetails.statusText}}</text>
+        </view>
+        <view class="refund-detail-item">
+          <text class="label">申请时间</text>
+          <text class="value">{{refundDetails.createTime}}</text>
+        </view>
+      </view>
+      
+      <view class="modal-footer" wx:if="{{refundDetails.status === 'PROCESSING'}}">
+        <view class="btn btn-reject" bindtap="rejectRefund">拒绝退款</view>
+        <view class="btn btn-approve" bindtap="approveRefund">通过退款</view>
+      </view>
+    </view>
+  </view>
+</view> 

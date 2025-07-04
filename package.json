@@ -1,0 +1,11 @@
+{
+  "name": "wxcloud-little-store",
+  "version": "1.0.0",
+  "description": "微信云开发商店小程序",
+  "scripts": {
+    "dev": "echo 开发模式",
+    "build": "echo 构建项目"
+  },
+  "devDependencies": {},
+  "private": true
+} 

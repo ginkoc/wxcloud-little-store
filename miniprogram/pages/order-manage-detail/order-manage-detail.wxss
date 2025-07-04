@@ -1,0 +1,898 @@
+.container {
+  padding: 0;
+  background-color: #f8f8f8;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  background-color: #fff;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.back-btn {
+  font-size: 28rpx;
+  color: #666;
+  padding: 10rpx 20rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 30rpx;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.loading-indicator {
+  width: 60rpx;
+  height: 60rpx;
+  border: 6rpx solid #f3f3f3;
+  border-top: 6rpx solid #e64340;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 状态区域 */
+.status-section {
+  background-color: #fff;
+  padding: 30rpx;
+  margin: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.status-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.status-actions {
+  display: flex;
+  align-items: center;
+}
+
+.status-picker {
+  margin-right: 20rpx;
+}
+
+.picker {
+  padding: 10rpx 20rpx;
+  background-color: #f5f5f5;
+  color: #333;
+  border-radius: 6rpx;
+  font-size: 26rpx;
+  border: 1rpx solid #ddd;
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.status-save {
+  padding: 10rpx 20rpx;
+  background-color: #f5f5f5;
+  color: #999;
+  border-radius: 6rpx;
+  font-size: 26rpx;
+  border: 1rpx solid #ddd;
+}
+
+.status-save.active {
+  background-color: #e64340;
+  color: #fff;
+  border-color: #e64340;
+}
+
+.refund-status {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.refund-text {
+  font-size: 28rpx;
+  color: #e64340;
+}
+
+.refund-btn {
+  padding: 8rpx 16rpx;
+  background-color: #e64340;
+  color: #fff;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+}
+
+/* 内容区域通用样式 */
+.order-items, .order-info, .delivery-section, .order-price {
+  background-color: #fff;
+  padding: 30rpx;
+  margin: 20rpx;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+/* 商品列表样式 */
+.item-list {
+  margin-top: 20rpx;
+}
+
+.item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+.item-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 8rpx;
+  margin-right: 20rpx;
+  background-color: #f9f9f9;
+}
+
+.item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.item-name {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.item-price-qty {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-price {
+  font-size: 30rpx;
+  color: #e64340;
+  font-weight: bold;
+}
+
+.item-qty {
+  font-size: 26rpx;
+  color: #999;
+}
+
+/* 订单信息样式 */
+.info-item, .address-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #333;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-item:last-child, .address-line:last-child {
+  border-bottom: none;
+}
+
+.label {
+  color: #666;
+}
+
+.value {
+  color: #333;
+  text-align: right;
+  flex: 1;
+  word-break: break-all;
+}
+
+/* 配送信息样式 */
+.address-content {
+  margin-top: 20rpx;
+}
+
+/* 价格信息样式 */
+.price-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.price-item.total {
+  margin-top: 10rpx;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+  font-weight: bold;
+}
+
+.price-item.total .value {
+  color: #e64340;
+  font-size: 32rpx;
+}
+
+/* 空数据样式 */
+.empty-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.btn {
+  margin-top: 30rpx;
+  padding: 16rpx 40rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+}
+
+.btn-default {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+/* 退款详情弹窗 */
+.refund-details-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  width: 600rpx;
+  background-color: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  position: relative;
+  z-index: 101;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+  padding: 0 10rpx;
+}
+
+.modal-body {
+  padding: 20rpx 30rpx;
+}
+
+.refund-detail-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #333;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.refund-detail-item:last-child {
+  border-bottom: none;
+}
+
+.modal-footer {
+  display: flex;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.btn-reject, .btn-approve {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+}
+
+.btn-reject {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.btn-approve {
+  background-color: #e64340;
+  color: #fff;
+}
+
+/* 🆕 操作按钮区域样式 */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  padding: 30rpx;
+  background: #fff;
+  margin-top: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 200rpx;
+  height: 80rpx;
+  border-radius: 8rpx;
+  border: none;
+  font-size: 28rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* 按钮颜色主题 */
+.action-btn.primary {
+  background: #07c160;
+  color: #fff;
+}
+
+.action-btn.danger {
+  background: #fa5151;
+  color: #fff;
+}
+
+.action-btn.secondary {
+  background: #f2f2f2;
+  color: #333;
+  border: 2rpx solid #ddd;
+}
+
+.action-btn.warning {
+  background: #ff9500;
+  color: #fff;
+}
+
+/* 🆕 刷新按钮样式 */
+.refresh-btn {
+  position: relative;
+}
+
+.refresh-icon {
+  margin-right: 8rpx;
+  animation: rotate 2s linear infinite;
+  animation-play-state: paused;
+}
+
+.refresh-btn:active .refresh-icon {
+  animation-play-state: running;
+}
+
+/* 🆕 进度按钮脉冲效果 */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.progress-icon {
+  margin-right: 8rpx;
+}
+
+/* 按钮按下效果 */
+.action-btn:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+/* 🆕 状态信息样式 */
+.status-info {
+  padding: 40rpx 30rpx;
+  margin: 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 12rpx;
+  text-align: center;
+}
+
+.info-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 🆕 中止原因样式 */
+.cancel-reason {
+  color: #e64340 !important;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 🆕 操作人样式 */
+.cancel-operator {
+  color: #666 !important;
+  font-weight: 500;
+  background-color: #f5f5f5;
+  padding: 4rpx 12rpx;
+  border-radius: 4rpx;
+  font-size: 24rpx;
+}
+
+/* 🆕 退款中状态样式 */
+.refunding-info {
+  padding: 30rpx;
+  background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+  border-radius: 12rpx;
+  margin: 20rpx;
+  text-align: center;
+}
+
+.refunding-info .info-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2d3436;
+  margin-bottom: 15rpx;
+}
+
+.refunding-info .info-desc {
+  display: block;
+  font-size: 28rpx;
+  color: #636e72;
+  margin-bottom: 10rpx;
+  line-height: 1.4;
+}
+
+.refunding-info .info-note {
+  display: block;
+  font-size: 24rpx;
+  color: #74b9ff;
+  font-style: italic;
+}
+
+/* 🆕 支付状态样式 */
+.payment-refunded {
+  color: #07c160 !important; /* 已退款 - 绿色 */
+  font-weight: 500;
+}
+
+.payment-refunding {
+  color: #ff9500 !important; /* 退款中 - 橙色 */
+  font-weight: 500;
+}
+
+/* 🆕 折叠式订单状态历史样式 */
+.order-status-section {
+  background: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  color: #1989fa;
+  font-size: 28rpx;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-text {
+  margin-right: 8rpx;
+}
+
+.arrow {
+  font-size: 24rpx;
+  transition: transform 0.3s ease;
+}
+
+.arrow.up {
+  transform: rotate(180deg);
+}
+
+/* 当前状态概览 */
+.current-status-overview {
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.status-current {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.status-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  margin-right: 16rpx;
+}
+
+.status-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.status-time {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+}
+
+.create-time {
+  font-size: 28rpx;
+  color: #888;
+}
+
+.create-time .label {
+  margin-right: 8rpx;
+}
+
+/* 详细状态历史 */
+.status-history-detail {
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.status-history-detail.collapsed {
+  max-height: 0;
+  opacity: 0;
+}
+
+.status-history-detail.expanded {
+  max-height: 1060rpx; /* 调整为更大的固定高度 */
+  opacity: 1;
+  padding-top: 30rpx;
+}
+
+/* 滚动容器 */
+.timeline-scroll {
+  height: 800rpx; /* 调整高度，确保能滚动 */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* iOS流畅滚动 */
+}
+
+/* 加载更多提示 */
+.loading-more {
+  text-align: center;
+  padding: 20rpx 0;
+  color: #999;
+  font-size: 24rpx;
+}
+
+/* 没有更多数据提示 */
+.no-more-data {
+  text-align: center;
+  padding: 20rpx 0;
+  color: #999;
+  font-size: 24rpx;
+  border-top: 1rpx solid #f0f0f0;
+  margin-top: 10rpx;
+}
+
+.loading-history {
+  text-align: center;
+  padding: 20rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+/* 时间轴容器 */
+.timeline-container {
+  position: relative;
+  min-height: 100%; /* 确保内容足够高时可以滚动 */
+  padding-bottom: 100rpx; /* 底部留出空间，方便触发滚动加载 */
+}
+
+/* 🆕 状态历史时间线样式 */
+.timeline-item {
+  display: flex;
+  margin-bottom: 30rpx;
+  position: relative;
+}
+
+.timeline-left {
+  width: 40rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20rpx;
+}
+
+.timeline-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: #07c160;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-dot.failed {
+  background-color: #fa5151;
+}
+
+.timeline-line {
+  width: 2rpx;
+  flex: 1;
+  background-color: #e5e5e5;
+  margin-top: 8rpx;
+}
+
+.timeline-right {
+  flex: 1;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8rpx;
+}
+
+.status-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.status-name.failed-text {
+  color: #fa5151;
+}
+
+.operator {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.timeline-time {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.timeline-remark {
+  background-color: #f7f7f7;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  margin-bottom: 8rpx;
+}
+
+.remark-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.4;
+}
+
+.timeline-transition {
+  margin-top: 8rpx;
+}
+
+.transition-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 无历史记录提示 */
+.no-history {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999;
+}
+
+.no-history-text {
+  font-size: 28rpx;
+}
+
+/* 商品信息样式调整 */
+.product-section {
+  background: #fff;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.product-list {
+  margin-top: 20rpx;
+}
+
+/* 添加可点击样式 */
+.product-list.clickable {
+  position: relative;
+  cursor: pointer;
+}
+
+.product-list.clickable:active {
+  opacity: 0.8;
+  background-color: #f9f9f9;
+}
+
+/* 添加点击提示箭头 */
+.product-list.clickable::after {
+  content: "";
+  position: absolute;
+  right: 20rpx;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 16rpx;
+  height: 16rpx;
+  border-top: 2rpx solid #ccc;
+  border-right: 2rpx solid #ccc;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.product-item:last-child {
+  border-bottom: none;
+}
+
+.product-image {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  margin-right: 20rpx;
+}
+
+.product-info {
+  flex: 1;
+}
+
+.product-name {
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 12rpx;
+}
+
+.product-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-price {
+  font-size: 28rpx;
+  color: #ff4757;
+  font-weight: 600;
+}
+
+.product-quantity {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 响应式适配 */
+@media screen and (max-width: 375px) {
+  .timeline-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .operator {
+    margin-top: 4rpx;
+  }
+  
+  .status-name {
+    font-size: 28rpx;
+  }
+}
+
+/* 🆕 失败状态的特殊样式 */
+.timeline-dot.failed {
+  background-color: #fa5151 !important;
+  border-color: #ffebee !important;
+}
+
+.status-name.failed-text {
+  color: #fa5151;
+  font-weight: 600;
+} 

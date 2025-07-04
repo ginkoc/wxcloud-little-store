@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
+  <!-- 购物车主体 -->
+  <path d="M10 16H38L36 32H12L10 16Z" stroke="#ff9900" stroke-width="2.5" fill="none"/>
+  
+  <!-- 车轮 -->
+  <circle cx="16" cy="38" r="3" stroke="#ff9900" stroke-width="2" fill="none"/>
+  <circle cx="32" cy="38" r="3" stroke="#ff9900" stroke-width="2" fill="none"/>
+  
+  <!-- 手柄 -->
+  <path d="M14 16L8 6" stroke="#ff9900" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M8 6H22" stroke="#ff9900" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+</svg>

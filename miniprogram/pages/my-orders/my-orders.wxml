@@ -1,0 +1,128 @@
+<view class="container">
+  <!-- 页面头部 -->
+  <view class="header">
+    <text class="title">我的订单</text>
+  </view>
+  
+  <!-- 🆕 状态筛选器 -->
+  <view class="status-filter">
+    <scroll-view class="filter-scroll" scroll-x="true">
+      <view class="filter-tabs">
+        <view 
+          class="filter-tab {{selectedStatus === item.value ? 'active' : ''}}" 
+          wx:for="{{statusList}}" 
+          wx:key="value"
+          bindtap="onStatusFilterChange" 
+          data-status="{{item.value}}"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  
+  <!-- 订单列表 -->
+  <view class="order-list" wx:if="{{orders.length > 0}}">
+    <view class="order-card" wx:for="{{orders}}" wx:key="_id">
+      <!-- 订单头部 -->
+      <view class="order-header">
+        <view class="order-info">
+          <text class="order-date">{{item.createTime}}</text>
+          <text class="order-id">订单号：{{item._id}}</text>
+        </view>
+        <view class="order-status" style="color: {{item.statusColor}}">{{item.statusText}}</view>
+      </view>
+      
+      <!-- 商品列表 - 改为缩略图形式 -->
+      <view class="product-card" bindtap="viewOrderDetail" data-id="{{item._id}}">
+        <!-- 产品缩略图和信息 -->
+        <view class="product-list">
+          <!-- 如果有多个商品，平铺显示商品图片 -->
+          <block wx:if="{{item.items.length > 1}}">
+            <view class="multi-product-images">
+              <image 
+                wx:for="{{item.items}}" 
+                wx:for-item="product" 
+                wx:key="productId"
+                wx:if="{{index < 2}}"
+                class="product-thumb" 
+                src="{{product.imageURL || product.image || '/images/default-product.png'}}" 
+                mode="aspectFill"
+              ></image>
+            </view>
+          </block>
+          
+          <!-- 如果只有一个商品，显示商品图片和详情 -->
+          <block wx:else>
+            <view class="single-product">
+              <image 
+                class="product-thumb" 
+                src="{{item.items[0].imageURL || item.items[0].image || '/images/default-product.png'}}" 
+                mode="aspectFill"
+              ></image>
+              <view class="product-info">
+                <view class="product-name">{{item.items[0].productName}}</view>
+                <view class="product-specs" wx:if="{{item.items[0].specs}}">{{item.items[0].specs}}</view>
+              </view>
+            </view>
+          </block>
+        </view>
+        
+        <!-- 价格和数量信息 -->
+        <view class="product-price-info">
+          <view class="price-amount">¥{{item.formattedTotalPrice}}</view>
+          <view class="product-count">共{{item.items.length}}件</view>
+        </view>
+      </view>
+      
+      <!-- 订单底部信息和操作按钮 -->
+      <view class="order-footer">
+        <view class="footer-space"></view>
+        <view class="action-buttons">
+          <!-- 待支付订单按钮 -->
+          <block wx:if="{{item.status === 'pending_payment'}}">
+            <view class="pay-btn" bindtap="payOrder" data-id="{{item._id}}">立即支付</view>
+            <navigator url="/pages/order-detail/order-detail?orderId={{item._id}}" hover-class="none" class="detail-btn">查看详情</navigator>
+          </block>
+          
+          <!-- 待收货订单按钮 -->
+          <block wx:elif="{{item.status === 'delivered'}}">
+            <view class="pay-btn" bindtap="confirmOrder" data-id="{{item._id}}">确认收货</view>
+            <navigator url="/pages/order-detail/order-detail?orderId={{item._id}}" hover-class="none" class="detail-btn">查看详情</navigator>
+          </block>
+          
+          <!-- 已完成订单按钮 -->
+          <block wx:elif="{{item.status === 'completed'}}">
+            <navigator url="/pages/order-detail/order-detail?orderId={{item._id}}" hover-class="none" class="detail-btn">查看详情</navigator>
+          </block>
+          
+          <!-- 其他状态按钮 -->
+          <block wx:else>
+            <navigator url="/pages/order-detail/order-detail?orderId={{item._id}}" hover-class="none" class="detail-btn">查看详情</navigator>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 加载状态 -->
+  <view class="loading-container" wx:if="{{isLoading && orders.length > 0}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+  
+  <!-- 无更多数据 -->
+  <view class="no-more-tip" wx:if="{{!hasMore && orders.length > 0}}">
+    <text>— 没有更多订单了 —</text>
+  </view>
+  
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{orders.length === 0 && !isLoading}}">
+    <image class="empty-icon" src="/images/shopping-cart.svg" mode="aspectFit"></image>
+    <text class="empty-title">暂无订单记录</text>
+    <text class="empty-desc">快去挑选心仪的商品吧~</text>
+    <view class="go-shopping-btn" bindtap="goShopping">
+      <text>立即购物</text>
+    </view>
+  </view>
+</view> 

@@ -1,0 +1,152 @@
+<view class="container">
+  <view class="header">
+    <text class="title">商品管理</text>
+  </view>
+  
+  <view class="main-content">
+    <!-- 左侧分类导航 -->
+    <view class="category-list">
+      <view 
+        class="category-item {{currentCategory === item._id ? 'active' : ''}}" 
+        wx:for="{{categories}}" 
+        wx:key="_id"
+        wx:for-index="idx"
+        bindtap="switchCategory"
+        data-id="{{item._id}}"
+        data-index="{{idx}}"
+      >
+        {{item.name}}
+      </view>
+    </view>
+
+    <!-- 右侧商品列表 -->
+    <view class="product-container">
+      <view class="product-list" wx:if="{{!isAddingProduct && !isEditingProduct}}">
+        <view class="product-item" wx:for="{{currentProducts}}" wx:key="_id">
+          <view class="product-card">
+            <image class="product-image" src="{{item.imageURL || '/images/default-product.png'}}" mode="aspectFill" lazy-load="true"></image>
+            <view class="product-content">
+              <view class="product-info">
+                <view class="product-name">{{item.name}}</view>
+                <view class="product-price">¥{{item.formattedPrice}}</view>
+                <view class="product-meta">
+                  <text class="product-stock">库存:{{item.stock || 0}}</text>
+                </view>
+                <view class="product-status {{item.isOnSale ? 'on-sale' : 'off-sale'}}">
+                  {{item.isOnSale ? '在售' : '下架'}}
+                </view>
+              </view>
+              <view class="product-actions">
+                <view class="action-btn edit-btn" bindtap="showEditForm" data-id="{{item._id}}">编辑</view>
+                <view class="action-btn {{item.isOnSale ? 'offline-btn' : 'online-btn'}}" bindtap="toggleProductStatus" data-id="{{item._id}}" data-status="{{item.isOnSale}}">{{item.isOnSale ? '下架' : '上架'}}</view>
+                <view class="action-btn delete-btn" bindtap="deleteProduct" data-id="{{item._id}}" data-name="{{item.name}}" data-image="{{item.imageURL}}">删除</view>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 空状态 -->
+        <view class="empty-state" wx:if="{{currentProducts.length === 0 && !isLoading}}">
+          <image class="empty-icon" src="/images/empty-box.svg" mode="aspectFit"></image>
+          <text class="empty-text">暂无商品</text>
+          <view class="add-first-btn" bindtap="showAddForm">添加第一个商品</view>
+        </view>
+        
+        <!-- 加载状态 -->
+        <view class="loading-container" wx:if="{{isLoading}}">
+          <view class="loading-spinner"></view>
+          <text class="loading-text">加载中...</text>
+        </view>
+        
+        <!-- 无更多数据 -->
+        <view class="no-more-tip" wx:if="{{!hasMore && currentProducts.length > 0 && !isLoading}}">
+          <text>— 没有更多商品了 —</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部添加商品按钮 -->
+  <view class="bottom-btn-container">
+    <view class="add-product-btn" bindtap="showAddForm">+</view>
+  </view>
+  
+  <!-- 添加/编辑商品表单 -->
+  <view class="form-overlay" wx:if="{{isAddingProduct || isEditingProduct}}" bindtap="cancelForm">
+    <view class="form-container" catchtap="preventClose">
+      <view class="form-header">
+        <text class="form-title">{{isAddingProduct ? '添加商品' : '编辑商品'}}</text>
+        <view class="close-btn" bindtap="cancelForm">×</view>
+      </view>
+      
+      <view class="form-body">
+        <view class="form-item">
+          <text class="form-label">商品名称</text>
+          <input class="form-input" value="{{formData.name}}" bindinput="onInput" data-field="name" placeholder="请输入商品名称" />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">商品价格</text>
+          <input class="form-input" type="digit" value="{{formData.price}}" bindinput="onInput" data-field="price" placeholder="请输入商品价格（精确到分）" />
+          <text class="form-hint">价格单位为元，最多支持两位小数</text>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">商品分类</text>
+          <picker class="form-picker" mode="selector" range="{{categories}}" range-key="name" value="{{formData.category}}" bindchange="onCategoryChange">
+            <view class="picker-text">
+              {{selectedCategoryName || '请选择分类'}}
+            </view>
+          </picker>
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">商品库存</text>
+          <input class="form-input" type="number" value="{{formData.stock}}" bindinput="onInput" data-field="stock" placeholder="请输入库存数量（不填则无限）" />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">商品描述</text>
+          <textarea class="form-textarea" value="{{formData.description}}" bindinput="onInput" data-field="description" placeholder="请输入商品描述" />
+        </view>
+        
+        <view class="form-item">
+          <text class="form-label">商品图片</text>
+          <view class="image-upload">
+            <view class="preview-image-container">
+              <image 
+                class="preview-image"
+                src="{{formData.imageURL || '/images/default-product.png'}}" 
+                mode="aspectFill"
+                bindtap="$previewImage" 
+                data-src="{{formData.imageURL}}"
+              ></image>
+            </view>
+            <view class="upload-btn" bindtap="chooseImage">选择图片</view>
+            
+            <!-- 上传进度条 -->
+            <view class="upload-progress-container" wx:if="{{isUploading}}">
+              <view class="upload-progress-text">上传中 {{uploadProgress}}%</view>
+              <view class="upload-progress-bar">
+                <view class="upload-progress-inner" style="width: {{uploadProgress}}%;"></view>
+              </view>
+            </view>
+            
+            <!-- 上传失败显示重试按钮 -->
+            <view class="upload-retry-btn" bindtap="retryUpload" wx:if="{{uploadFailed}}">
+              重试上传
+            </view>
+          </view>
+        </view>
+      </view>
+      
+      <view class="form-footer">
+        <view class="form-btn submit-btn" bindtap="submitForm">提交</view>
+        <view class="form-btn cancel-btn" bindtap="cancelForm">取消</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 用于图片压缩的隐藏canvas -->
+  <canvas type="2d" id="imageCompressCanvas" style="position: absolute; left: -9999px; width: 300px; height: 300px;"></canvas>
+</view> 

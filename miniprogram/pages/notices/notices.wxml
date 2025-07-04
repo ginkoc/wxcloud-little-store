@@ -1,0 +1,220 @@
+<!--管理员消息通知页面-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="header">
+    <text class="title">消息通知</text>
+    <view class="unread-count" wx:if="{{unreadCount > 0}}">
+      <text>{{unreadCount}}条未读</text>
+    </view>
+  </view>
+
+  <!-- 筛选条件 -->
+  <view class="filter-bar">
+    <view class="filter-item">
+      <text class="filter-label">状态:</text>
+      <picker range="{{statusOptions}}" range-key="label" value="{{statusIndex}}" bindchange="onStatusChange">
+        <view class="picker">
+          {{statusOptions[statusIndex].label}}
+          <text class="icon-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="filter-item">
+      <text class="filter-label">级别:</text>
+      <picker range="{{levelOptions}}" range-key="label" value="{{levelIndex}}" bindchange="onLevelChange">
+        <view class="picker">
+          {{levelOptions[levelIndex].label}}
+          <text class="icon-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    
+    <view class="filter-item">
+      <button class="btn-refresh" size="mini" bindtap="onRefresh">刷新</button>
+    </view>
+  </view>
+
+  <!-- 批量操作 -->
+  <view class="batch-actions" wx:if="{{selectedNotices.length > 0}}">
+    <text class="selected-info">已选择 {{selectedNotices.length}} 条消息</text>
+    <button class="btn-batch" size="mini" bindtap="batchMarkAsRead">标记已读</button>
+    <button class="btn-batch" size="mini" bindtap="batchDelete">删除</button>
+  </view>
+
+  <!-- 消息列表 -->
+  <view class="notices-list">
+    <view 
+      class="notice-item {{notice.status === 'UNREAD' ? 'unread' : ''}} {{notice.level === 'ERROR' ? 'error' : notice.level === 'WARNING' ? 'warning' : 'info'}}"
+      wx:for="{{noticeList}}" 
+      wx:key="_id"
+      bindtap="onNoticeClick"
+      data-notice="{{item}}"
+      data-index="{{index}}"
+    >
+      <!-- 选择框 -->
+      <view class="notice-selector" catchtap="onToggleSelect" data-notice-id="{{item._id}}">
+        <text class="checkbox {{selectedNotices.indexOf(item._id) !== -1 ? 'checked' : ''}}">
+          {{selectedNotices.indexOf(item._id) !== -1 ? '✓' : ''}}
+        </text>
+      </view>
+
+      <!-- 消息内容 -->
+      <view class="notice-content">
+        <view class="notice-header">
+          <text class="notice-title">{{item.title}}</text>
+          <view class="notice-level level-{{item.level}}">
+            <text>{{levelLabels[item.level] || item.level}}</text>
+          </view>
+        </view>
+        
+        <view class="notice-body">
+          <text class="notice-text">{{item.content}}</text>
+        </view>
+        
+        <view class="notice-meta">
+          <text class="notice-time">{{item.createTime}}</text>
+          <text class="notice-order" wx:if="{{item.orderId}}">订单: {{item.orderId}}</text>
+          <view class="notice-status status-{{item.status}}">
+            <text>{{statusLabels[item.status] || item.status}}</text>
+          </view>
+        </view>
+
+        <!-- 操作建议 -->
+        <view class="suggestions" wx:if="{{item.suggestions && item.suggestions.length > 0}}">
+          <text class="suggestions-title">处理建议:</text>
+          <view class="suggestion-list">
+            <text 
+              class="suggestion-item" 
+              wx:for="{{item.suggestions}}" 
+              wx:for-item="suggestion" 
+              wx:for-index="sIndex"
+              wx:key="sIndex"
+            >
+              • {{suggestion}}
+            </text>
+          </view>
+        </view>
+
+        <!-- 相关链接 -->
+        <view class="related-links" wx:if="{{item.relatedLinks && item.relatedLinks.length > 0}}">
+          <text class="links-title">相关链接:</text>
+          <view class="link-list">
+            <text 
+              class="link-item" 
+              wx:for="{{item.relatedLinks}}" 
+              wx:for-item="link" 
+              wx:for-index="lIndex"
+              wx:key="lIndex"
+              bindtap="onLinkClick"
+              data-url="{{link.url}}"
+            >
+              {{link.text}}
+            </text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="notice-actions">
+        <button 
+          class="btn-action" 
+          size="mini" 
+          bindtap="markAsRead" 
+          data-notice-id="{{item._id}}"
+          wx:if="{{item.status === 'UNREAD'}}"
+        >
+          标记已读
+        </button>
+        <button 
+          class="btn-action btn-danger" 
+          size="mini" 
+          bindtap="deleteNotice" 
+          data-notice-id="{{item._id}}"
+        >
+          删除
+        </button>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{noticeList.length === 0 && !loading}}">
+      <text class="empty-text">暂无消息通知</text>
+      <button class="btn-refresh" bindtap="onRefresh">刷新</button>
+    </view>
+
+    <!-- 加载中 -->
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore && !loading}}">
+      <button class="btn-load-more" bindtap="loadMore">加载更多</button>
+    </view>
+  </view>
+</view>
+
+<!-- 消息详情弹窗 -->
+<view class="modal-overlay" wx:if="{{showDetailModal}}" bindtap="closeDetailModal">
+  <view class="modal-content" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">消息详情</text>
+      <text class="modal-close" bindtap="closeDetailModal">×</text>
+    </view>
+    
+    <view class="modal-body" wx:if="{{selectedNotice}}">
+      <view class="detail-item">
+        <text class="detail-label">标题:</text>
+        <text class="detail-value">{{selectedNotice.title}}</text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="detail-label">内容:</text>
+        <text class="detail-value">{{selectedNotice.content}}</text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="detail-label">级别:</text>
+        <text class="detail-value level-{{selectedNotice.level}}">
+          {{levelLabels[selectedNotice.level] || selectedNotice.level}}
+        </text>
+      </view>
+      
+      <view class="detail-item" wx:if="{{selectedNotice.orderId}}">
+        <text class="detail-label">关联订单:</text>
+        <text class="detail-value link" bindtap="goToOrder" data-order-id="{{selectedNotice.orderId}}">
+          {{selectedNotice.orderId}}
+        </text>
+      </view>
+      
+      <view class="detail-item">
+        <text class="detail-label">创建时间:</text>
+        <text class="detail-value">{{selectedNotice.createTime}}</text>
+      </view>
+      
+      <view class="detail-item" wx:if="{{selectedNotice.readTime}}">
+        <text class="detail-label">已读时间:</text>
+        <text class="detail-value">{{selectedNotice.readTime}}</text>
+      </view>
+
+      <!-- 技术信息（仅开发调试时显示） -->
+      <view class="detail-item" wx:if="{{selectedNotice.metadata && showTechnicalInfo}}">
+        <text class="detail-label">技术信息:</text>
+        <text class="detail-value technical">{{selectedNotice.metadata.originalError}}</text>
+      </view>
+    </view>
+    
+    <view class="modal-footer">
+      <button 
+        class="btn-modal" 
+        bindtap="markAsRead" 
+        data-notice-id="{{selectedNotice._id}}"
+        wx:if="{{selectedNotice.status === 'UNREAD'}}"
+      >
+        标记已读
+      </button>
+      <button class="btn-modal btn-primary" bindtap="closeDetailModal">关闭</button>
+    </view>
+  </view>
+</view> 

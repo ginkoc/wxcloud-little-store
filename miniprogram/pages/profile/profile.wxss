@@ -1,0 +1,178 @@
+.container {
+  padding: 0;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--card-bg-color);
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.title {
+  font-size: var(--font-lg);
+  font-weight: bold;
+  color: var(--text-main);
+}
+
+/* 用户信息区域 */
+.user-info-section {
+  background-color: var(--card-bg-color);
+  margin: var(--spacing-md);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  position: relative;
+  box-shadow: var(--shadow-sm);
+}
+
+.avatar-container {
+  margin-right: var(--spacing-md);
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: var(--radius-circle);
+  border: 2rpx solid var(--divider-color);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-size: var(--font-md);
+  font-weight: bold;
+  color: var(--text-main);
+  margin-bottom: var(--spacing-xs);
+}
+
+.user-role {
+  font-size: var(--font-xs);
+  color: var(--text-placeholder);
+}
+
+.logout-btn {
+  position: absolute;
+  right: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: #f0f0f0;
+  border-radius: 30rpx;
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.login-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-md) 0;
+}
+
+.login-prompt {
+  font-size: var(--font-sm);
+  color: var(--text-placeholder);
+  margin-bottom: var(--spacing-md);
+}
+
+.login-btn {
+  padding: var(--spacing-xs) var(--spacing-lg);
+  background-color: var(--primary-color);
+  color: white;
+  font-size: var(--font-sm);
+  border-radius: 30rpx;
+}
+
+/* 菜单区域 */
+.menu-section {
+  background-color: var(--card-bg-color);
+  margin: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-bottom: 1rpx solid var(--divider-color);
+  position: relative;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  margin-right: var(--spacing-md);
+  color: var(--primary-color);
+}
+
+.menu-text {
+  flex: 1;
+  font-size: var(--font-sm);
+  color: var(--text-main);
+}
+
+.menu-arrow {
+  font-size: var(--font-sm);
+  color: var(--text-disabled);
+}
+
+.disabled {
+  opacity: 0.6;
+}
+
+.gray {
+  color: var(--text-placeholder);
+}
+
+/* 底部版本信息 */
+.footer {
+  margin-top: auto;
+  padding: var(--spacing-lg) 0;
+  display: flex;
+  justify-content: center;
+}
+
+.version {
+  font-size: var(--font-xs);
+  color: var(--text-placeholder);
+}
+
+/* 未读消息徽章 */
+.unread-badge {
+  position: absolute;
+  top: 8rpx;
+  right: 80rpx;
+  background: var(--price-color);
+  color: white;
+  font-size: 20rpx;
+  padding: 4rpx 8rpx;
+  border-radius: 12rpx;
+  min-width: 20rpx;
+  height: 24rpx;
+  line-height: 24rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 4rpx rgba(255, 68, 68, 0.3);
+}
+
+/* 菜单项需要相对定位以支持徽章绝对定位 */
+.menu-item {
+  position: relative;
+} 

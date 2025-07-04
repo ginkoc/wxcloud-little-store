@@ -1,0 +1,542 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color, #F0F6FF);
+  color: var(--text-primary, #333333);
+}
+
+.header {
+  padding: 30rpx;
+  background-color: var(--primary-color, #3B87DE);
+  box-shadow: 0 4rpx 16rpx rgba(59, 135, 222, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.title {
+  font-size: var(--font-lg, 36rpx);
+  font-weight: bold;
+  color: #FFFFFF;
+}
+
+/* 搜索区域样式 */
+.search-section {
+  background-color: #FFFFFF;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(59, 135, 222, 0.05);
+}
+
+.search-row {
+  display: flex;
+  margin-bottom: 20rpx;
+  align-items: center;
+}
+
+/* 第一行搜索布局 */
+.search-type {
+  width: 160rpx;
+  margin-right: 10rpx;
+  height: 72rpx;
+}
+
+.search-type .picker {
+  height: 100%;
+  padding: 0 10rpx;
+  background-color: #F7F9FC;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+  border-radius: 8rpx;
+}
+
+.search-input-container {
+  flex: 1;
+  display: flex;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+  border-radius: 8rpx;
+  height: 72rpx;
+  background-color: #F7F9FC;
+  margin-right: 10rpx;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0 20rpx;
+  font-size: var(--font-sm, 28rpx);
+  height: 100%;
+}
+
+.search-btn {
+  width: 72rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color, #3B87DE);
+  color: #FFFFFF;
+  border-top-right-radius: 8rpx;
+  border-bottom-right-radius: 8rpx;
+  font-size: 32rpx;
+}
+
+/* 清空按钮 - 放在搜索按钮旁边 */
+.clear-btn {
+  width: 100rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-light, #E8F3FF);
+  color: var(--primary-color, #3B87DE);
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+/* 筛选条件区域 */
+.filter-row {
+  display: flex;
+  width: 100%;
+}
+
+/* 日期筛选器样式 - 延伸宽度 */
+.date-filter {
+  flex: 2;
+  height: 80rpx;
+  background-color: #F7F9FC;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  margin-right: 10rpx;
+  position: relative;
+}
+
+/* 状态筛选器样式 - 压缩宽度 */
+.status-filter {
+  flex: 1;
+  height: 80rpx;
+  background-color: #F7F9FC;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  position: relative;
+}
+
+.filter-value {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+}
+
+.filter-value .filter-label {
+  font-size: 24rpx;
+  color: var(--text-tertiary, #999999);
+  margin-bottom: 4rpx;
+}
+
+.filter-text {
+  font-size: 28rpx;
+  color: var(--text-primary, #333333);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.arrow {
+  font-size: 20rpx;
+  margin-left: 8rpx;
+  color: var(--text-tertiary, #999999);
+}
+
+/* 日期选择器样式 */
+.date-picker-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.date-picker-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.date-picker {
+  position: relative;
+  width: 80%;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-lg, 16rpx);
+  padding: 30rpx;
+  box-shadow: 0 8rpx 24rpx rgba(59, 135, 222, 0.12);
+}
+
+.date-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+  font-size: var(--font-md, 32rpx);
+  font-weight: bold;
+}
+
+.close-btn {
+  font-size: 40rpx;
+  line-height: 1;
+  padding: 10rpx;
+}
+
+.date-input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.date-input-row-text {
+  width: 160rpx;
+  font-size: var(--font-sm, 28rpx);
+}
+
+.date-input {
+  flex: 1;
+  padding: 16rpx;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+  border-radius: 8rpx;
+  font-size: var(--font-sm, 28rpx);
+}
+
+.date-picker-actions {
+  display: flex;
+  border-top: 1rpx solid var(--border-color, #EAEEF5);
+  margin-top: 30rpx;
+  padding-top: 20rpx;
+}
+
+.date-picker-actions-btn {
+  flex: 1;
+  margin: 0 10rpx;
+  border-radius: var(--radius-sm, 8rpx);
+  font-size: var(--font-sm, 28rpx);
+  line-height: 2.5;
+}
+
+.cancel-btn {
+  background-color: #F5F5F5;
+  color: var(--text-secondary, #666666);
+}
+
+.confirm-btn {
+  background-color: var(--primary-color, #3B87DE);
+  color: #FFFFFF;
+}
+
+/* 订单列表样式 */
+.order-list {
+  flex: 1;
+  padding: 0 24rpx 24rpx;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 16rpx 0;
+  font-size: var(--font-xs, 24rpx);
+  color: var(--text-tertiary, #999999);
+}
+
+/* 卡片式订单项 */
+.order-item {
+  position: relative;
+  background-color: #FFFFFF;
+  border-radius: var(--radius-md, 12rpx);
+  margin-bottom: 24rpx;
+  padding: 0;
+  box-shadow: var(--shadow-sm, 0 2rpx 8rpx rgba(59, 135, 222, 0.05));
+  overflow: hidden;
+}
+
+/* 订单头部 */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24rpx;
+  border-bottom: 1rpx solid var(--border-color, #EAEEF5);
+}
+
+.order-id-section {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.order-id-label {
+  font-size: var(--font-xs, 24rpx);
+  color: var(--text-tertiary, #999999);
+  margin-right: 8rpx;
+  white-space: nowrap;
+}
+
+.order-id-value {
+  font-size: var(--font-sm, 28rpx);
+  color: var(--text-primary, #333333);
+  font-weight: 500;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 订单状态样式 */
+.order-status {
+  font-size: var(--font-sm, 28rpx);
+  font-weight: bold;
+  white-space: nowrap;
+  margin-left: 16rpx;
+}
+
+/* 订单内容区 */
+.order-content {
+  padding: 24rpx;
+}
+
+.order-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16rpx;
+}
+
+.order-info-item {
+  display: flex;
+  flex-direction: column;
+  margin-right: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.info-label {
+  font-size: var(--font-xs, 24rpx);
+  color: var(--text-tertiary, #999999);
+  margin-bottom: 4rpx;
+}
+
+.info-value {
+  font-size: var(--font-sm, 28rpx);
+  color: var(--text-secondary, #666666);
+}
+
+.info-value.highlight {
+  color: var(--primary-color, #3B87DE);
+  font-weight: 500;
+}
+
+/* 商品图片缩略图区域 */
+.order-product-images {
+  margin: 16rpx 0;
+}
+
+.product-images-scroll {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.product-images-container {
+  display: inline-block;
+  padding: 8rpx 0;
+}
+
+.product-thumbnail {
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 16rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+  background-color: #f5f5f5;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+}
+
+/* 商品信息和价格区域 */
+.order-product-info {
+  padding-top: 16rpx;
+  margin-top: 16rpx;
+  border-top: 1rpx dashed var(--border-color, #EAEEF5);
+}
+
+.product-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-count {
+  font-size: var(--font-xs, 24rpx);
+  color: var(--text-tertiary, #999999);
+}
+
+.order-price {
+  font-size: var(--font-md, 32rpx);
+  font-weight: bold;
+  color: var(--price-color, #E64340);
+}
+
+/* 操作区域 */
+.order-actions {
+  display: flex;
+  padding: 0 24rpx 24rpx 24rpx;
+  justify-content: flex-end;
+}
+
+/* 小型查看详情按钮 */
+.detail-btn-small {
+  font-size: 24rpx;
+  padding: 8rpx 24rpx;
+  background-color: var(--primary-color, #3B87DE);
+  color: #FFFFFF;
+  border-radius: 30rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2rpx 8rpx rgba(59, 135, 222, 0.2);
+}
+
+.detail-btn-small:active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* 订单底部区域 - 可删除或保留为空 */
+.order-footer {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border-top: 1rpx solid var(--border-color, #EAEEF5);
+}
+
+/* 以下是旧的样式，可以删除或保留 */
+.order-price-section {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+}
+
+.order-detail-btn {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 24rpx 0;
+}
+
+.detail-btn {
+  width: 90%;
+  height: 80rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30rpx;
+  background-color: var(--primary-color, #3B87DE);
+  color: #FFFFFF;
+  border-radius: 40rpx;
+  box-shadow: 0 4rpx 12rpx rgba(59, 135, 222, 0.2);
+}
+
+.detail-btn-active {
+  opacity: 0.8;
+  transform: scale(0.98);
+}
+
+/* 加载状态 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60rpx 0;
+  color: var(--text-tertiary, #999999);
+  font-size: var(--font-xs, 24rpx);
+}
+
+.loading-indicator {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid #F3F3F3;
+  border-top: 4rpx solid var(--primary-color, #3B87DE);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16rpx;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 分页控制 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30rpx 0;
+  margin-top: 20rpx;
+}
+
+.page-btn {
+  padding: 10rpx 20rpx;
+  margin: 0 10rpx;
+  border: 1rpx solid var(--border-color, #EAEEF5);
+  border-radius: var(--radius-sm, 8rpx);
+  font-size: var(--font-xs, 24rpx);
+  background-color: #FFFFFF;
+  color: var(--text-primary, #333333);
+}
+
+.page-current {
+  padding: 0 20rpx;
+  font-size: var(--font-xs, 24rpx);
+  color: var(--text-secondary, #666666);
+}
+
+.disabled {
+  opacity: 0.5;
+  color: var(--text-tertiary, #999999);
+}
+
+/* 空结果提示 */
+.empty-tip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100rpx 0;
+}
+
+.empty-tip-text {
+  color: var(--text-tertiary, #999999);
+  font-size: var(--font-sm, 28rpx);
+}
+
+.date-picker-title {
+  font-size: var(--font-md, 32rpx);
+  font-weight: bold;
+}
+
+.loading-text {
+  font-size: var(--font-xs, 24rpx);
+  color: var(--text-tertiary, #999999);
+  margin-top: 10rpx;
+} 
