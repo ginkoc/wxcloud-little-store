@@ -45,7 +45,7 @@
     "swc": false,
     "disableSWC": true
   },
-  "appid": "wx3950196136ed8c4e",
+  "appid": "your_appid",
   "projectname": "susie-store",
   "libVersion": "2.14.1",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
